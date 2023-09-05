@@ -1,13 +1,23 @@
-<app-header></app-header>
+<app-header>
+  <app-button buttonText="Login"></app-button>
+</app-header>
 <div class="app-root">
   <!-- Search component -->
   <!--<app-search></app-search>-->
 
   <!-- Info component -->
-  <!--<app-info></app-info>-->
+  <app-info title="Your List Is Empty" text="Please use 'Add New Course' button to add your first course">
+    <app-button buttonText="Add new course"></app-button>
+  </app-info>
+
+  <!-- Courses list -->
+  <app-course-list [courses]="coursesList"></app-course-list>
 
   <!-- Course Card component -->
-  <!--<app-course-card></app-course-card>-->
+  <!-- <app-course-card>
+    <app-button iconName="edit"></app-button>
+    <app-button iconName="remove"></app-button>
+  </app-course-card> -->
 
   <!-- Login Form component -->
   <!--<app-login-form></app-login-form>-->
