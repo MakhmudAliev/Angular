@@ -12,8 +12,8 @@
       </div>
       <div>
         <b>Created: </b
-        ><span class="course-card__date"
-          >{{ creationDate?.getDate() }}.{{ creationDate!!.getMonth() + 1 }}.{{ creationDate?.getFullYear() }}
+        ><span class="course-card__date">
+          {{ creationDate | date : 'dd.MM.yyyy' }}
         </span>
       </div>
     </div>
