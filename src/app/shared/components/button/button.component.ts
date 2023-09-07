@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { IconDefinition, IconName, faEdit, fas } from '@fortawesome/free-solid-svg-icons';
 
@@ -7,7 +7,7 @@ import { IconDefinition, IconName, faEdit, fas } from '@fortawesome/free-solid-s
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
 })
-export class ButtonComponent {
+export class ButtonComponent implements OnChanges {
   @Input() buttonText?: string;
   @Input() iconName?: IconName;
   icon: IconDefinition = faEdit;
@@ -17,13 +17,14 @@ export class ButtonComponent {
     library.addIconPacks(fas);
   }
 
-  ngOnInit() {
+  ngOnChanges() {
+    // changes
     if (this.iconName) {
-      this.icon = this.library?.getIconDefinition('fas', this.iconName) || faEdit;
+      this.icon = this.library.getIconDefinition('fas', this.iconName) || faEdit;
     }
   }
 
-  onClick = () => {
+  onClick() {
     this.btnClick.emit();
-  };
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-course-card',
@@ -14,11 +14,9 @@ export class CourseCardComponent {
   @Input() authors?: string[];
 
   @Input() isEditable?: boolean;
-  @Input() onShowCourse?: (courseId: string) => void;
+  @Output() showCourse = new EventEmitter<string>();
 
   clickOnShow() {
-    if (this.onShowCourse && this.id) {
-      this.onShowCourse(this.id);
-    }
+    this.showCourse.emit(this.id);
   }
 }

@@ -8,15 +8,16 @@ import { mockedCoursesList } from '@app/shared/mocks/mock';
 })
 export class CourseListComponent {
   @Input() courses: typeof mockedCoursesList = [];
+  @Input() editable: boolean = false;
 
   @Output() showCourse: EventEmitter<string> = new EventEmitter<string>();
   @Output() editCourse: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleteCourse: EventEmitter<string> = new EventEmitter<string>();
 
-  onShowCourse = (courseId: string) => {
+  onShowCourse(courseId: string) {
     console.log('🚀 ~ onShowCourse:', courseId);
     this.showCourse.emit(courseId);
-  };
+  }
 
   onEditCourse = (courseId: string) => {
     console.log('🚀 ~ onEditCourse:', courseId);

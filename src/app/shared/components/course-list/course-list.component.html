@@ -5,9 +5,9 @@
   [description]="course.description"
   [duration]="course.duration"
   [creationDate]="parseDate(course.creationDate)"
-  [isEditable]="index % 2 === 0"
+  [isEditable]="editable"
   [authors]="course.authors"
-  [onShowCourse]="onShowCourse"
+  (showCourse)="onShowCourse($event)"
 >
   <div class="course-list__action-items">
     <app-button iconName="pencil" (click)="onEditCourse(course.id)"></app-button>
