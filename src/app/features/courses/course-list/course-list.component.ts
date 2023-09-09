@@ -19,12 +19,12 @@ export class CourseListComponent {
     this.showCourse.emit(courseId);
   }
 
-  onEditCourse = (courseId: string) => {
+  onEditCourse (courseId: string) {
     console.log('🚀 ~ onEditCourse:', courseId);
     this.editCourse.emit(courseId);
   };
 
-  onDeleteCourse = (courseId: string) => {
+  onDeleteCourse (courseId: string) {
     console.log('🚀 ~ onDeleteCourse:', courseId);
     this.deleteCourse.emit(courseId);
   };
