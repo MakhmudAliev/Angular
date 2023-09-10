@@ -8,4 +8,8 @@ import { mockedCoursesList } from '@app/shared/mocks/mock';
 })
 export class CoursesComponent {
   @Input() courses: typeof mockedCoursesList = [];
+
+  onSearchClick() {
+    console.log('🚀 ~ search...');
+  }
 }

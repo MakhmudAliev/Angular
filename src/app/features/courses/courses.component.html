@@ -1,5 +1,12 @@
+<!-- Search component -->
+<app-search (search)="onSearchClick()"></app-search>
+
 <!-- Info component -->
-<app-info title="Your List Is Empty" text="Please use 'Add New Course' button to add your first course">
+<app-info
+  *ngIf="courses.length === 0"
+  title="Your List Is Empty"
+  text="Please use 'Add New Course' button to add your first course"
+>
   <app-button buttonText="Add new course"></app-button>
 </app-info>
 
