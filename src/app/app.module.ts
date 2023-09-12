@@ -9,19 +9,10 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
 import { CoursesService } from '@app/services/courses.service';
 import { CoursesModule } from './features/courses/courses.module';
 import { CourseInfoModule } from './features/course-info/course-info.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    SharedModule,
-    FontAwesomeModule,
-    CoursesModule,
-    CourseInfoModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [BrowserModule, SharedModule, FontAwesomeModule, CoursesModule, CourseInfoModule],
   providers: [AuthorizedGuard, NotAuthorizedGuard, CoursesService, CoursesStoreService],
   bootstrap: [AppComponent],
 })

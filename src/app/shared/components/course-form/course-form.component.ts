@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuid } from 'uuid';
@@ -36,6 +36,10 @@ export class CourseFormComponent implements OnInit {
     return this.courseForm.get('authors') as FormArray;
   }
 
+  getAuthorName(author: AbstractControl) {
+    return author.get('name')?.value;
+  }
+
   addAuthor() {
     const newAuthorName = this.courseForm.get('newAuthor')?.value;
 
@@ -54,12 +58,19 @@ export class CourseFormComponent implements OnInit {
   }
 
   isAddAuthorButtonDisabled() {
-    console.log("🚀 ~ this.courseForm.get('newAuthor')?.value:", this.courseForm.get('newAuthor'));
     return !this.courseForm.get('newAuthor')?.valid || this.courseForm.get('newAuthor')?.value === '';
   }
 
-  get formControls() {
-    return this.courseForm.controls;
+  get titleFormControl() {
+    return this.courseForm.controls.title;
+  }
+
+  get descriptionFormControl() {
+    return this.courseForm.controls.description;
+  }
+
+  get durationFormControl() {
+    return this.courseForm.controls.duration;
   }
 
   createAuthor(authorName: string) {

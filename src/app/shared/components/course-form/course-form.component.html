@@ -9,10 +9,10 @@
         <!--Use the name `title` for the form control.-->
         <input type="text" id="title" placeholder="Input text" name="title" formControlName="title" />
 
-        <span id="titleErrorMessage" class="text-danger" *ngIf="formControls.title.errors?.required"
+        <span id="titleErrorMessage" class="text-danger" *ngIf="titleFormControl.errors?.required"
           >Title is required.</span
         >
-        <span class="text-danger" *ngIf="formControls.title.errors?.minlength"
+        <span class="text-danger" *ngIf="titleFormControl.errors?.minlength"
           >Title should be at least 2 characters long.</span
         >
       </div>
@@ -30,11 +30,11 @@
           name="description"
           formControlName="description"
         ></textarea>
-        <span id="descriptionErrorMessage" class="text-danger" *ngIf="formControls.description.errors?.required"
+        <span id="descriptionErrorMessage" class="text-danger" *ngIf="descriptionFormControl.errors?.required"
           >Description is required.</span
         >
 
-        <span class="text-danger" *ngIf="formControls.description.errors?.minlength"
+        <span class="text-danger" *ngIf="descriptionFormControl.errors?.minlength"
           >Description should be at least 2 characters long.</span
         >
       </div>
@@ -55,12 +55,12 @@
                 name="duration"
                 formControlName="duration"
               />
-              <div class="course__duration">{{ +formControls.duration.value | duration }}</div>
+              <div class="course__duration">{{ durationFormControl.value | duration }}</div>
             </div>
-            <span id="durationErrorMessage" class="text-danger" *ngIf="formControls.duration.errors?.required"
+            <span id="durationErrorMessage" class="text-danger" *ngIf="durationFormControl.errors?.required"
               >Duration is required.</span
             >
-            <span class="text-danger" *ngIf="formControls.duration.errors?.min">Duration must be not less than 0.</span>
+            <span class="text-danger" *ngIf="durationFormControl.errors?.min">Duration must be not less than 0.</span>
           </div>
           <!-- End Duration -->
 
@@ -91,7 +91,7 @@
             <div *ngIf="authors.length === 0" class="mt-2">No authors added yet.</div>
             <div class="course__authors" *ngFor="let author of authors.controls; let i = index">
               <div>
-                {{ author.get('name')?.value }}
+                {{ getAuthorName(author) }}
                 <app-button (click)="createAuthor(author.get('name')?.value)" iconName="plus"></app-button>
                 <app-button (click)="removeAuthor(i)" iconName="trash-can"></app-button>
               </div>
