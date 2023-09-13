@@ -92,7 +92,7 @@
             <div class="course__authors" *ngFor="let author of authors.controls; let i = index">
               <div>
                 {{ getAuthorName(author) }}
-                <app-button (click)="createAuthor(author.get('name')?.value)" iconName="plus"></app-button>
+                <app-button (click)="createAuthor(getAuthorName(author))" iconName="plus"></app-button>
                 <app-button (click)="removeAuthor(i)" iconName="trash-can"></app-button>
               </div>
             </div>
