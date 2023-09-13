@@ -1,34 +1,28 @@
 <h2 class="text-align-center">Registration</h2>
 <div class="app-plate">
-  <form class="registration-form" #registrationForm="ngForm" (ngSubmit)="onSubmit()">
+  <form class="registration-form" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div>
       <div class="form__control">
         <label for="name">Name</label>
         <!--Use the name `name` for the form control.-->
-        <input type="text" id="name" placeholder="Input text" name="name" [(ngModel)]="name" />
-        <span id="nameErrorMessage" class="text-danger" *ngIf="isFormSubmitted && !name.trim()">Name is required.</span>
-        <span id="nameErrorMessage" class="text-danger" *ngIf="isFormSubmitted && name.length < 6 && name.trim() !== ''"
+        <input type="text" id="name" placeholder="Input text" name="name" formControlName="name" />
+        <span id="nameErrorMessage" class="text-danger" *ngIf="isFormSubmitted && nameFormControl.errors?.required"
+          >Name is required.</span
+        >
+        <span id="nameErrorMessage" class="text-danger" *ngIf="isFormSubmitted && nameFormControl.errors?.minlength"
           >Name must be not less than 6 symbols.</span
         >
       </div>
       <div class="form__control">
         <!--Use the name `email` for the form control.-->
         <label for="email">Email</label>
-        <input
-          type="text"
-          id="registration-email"
-          placeholder="Input text"
-          name="email"
-          [(ngModel)]="email"
-          emailValidator
-          #emailInput="ngModel"
-        />
+        <input type="text" id="registration-email" placeholder="Input text" name="email" formControlName="email" />
 
-        <span id="emailErrorMessage" class="text-danger" *ngIf="emailInput.invalid && emailInput.dirty">
-          Invalid email format.
+        <span id="emailErrorMessage" class="text-danger" *ngIf="isFormSubmitted && emailFormControl.errors?.required">
+          Email is required.
         </span>
-        <span id="emailErrorMessage" class="text-danger" *ngIf="isFormSubmitted && !email.trim()"
-          >Email is required.</span
+        <span id="emailErrorMessage" class="text-danger" *ngIf="isFormSubmitted && emailFormControl.hasError('email')"
+          >Invalid email format.</span
         >
       </div>
       <div class="form__control">
@@ -39,9 +33,12 @@
           id="registration-password"
           placeholder="Input text"
           name="password"
-          [(ngModel)]="password"
+          formControlName="password"
         />
-        <span id="passwordErrorMessage" class="text-danger" *ngIf="isFormSubmitted && !password.trim()"
+        <span
+          id="passwordErrorMessage"
+          class="text-danger"
+          *ngIf="isFormSubmitted && passwordFormControl.errors?.required"
           >Password is required.</span
         >
       </div>
@@ -49,5 +46,6 @@
     <div class="form__action">
       <app-button buttonText="Register"></app-button>
     </div>
+    <div class="form__text">If you already have an account you may <strong>Login</strong></div>
   </form>
 </div>

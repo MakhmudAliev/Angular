@@ -16,3 +16,8 @@ export class EmailValidatorDirective implements Validator {
     return Validators.email(control);
   }
 }
+
+export function customEmailValidator(control: AbstractControl): ValidationErrors | null {
+  const emailValidator = new EmailValidatorDirective();
+  return emailValidator.validate(control);
+}
