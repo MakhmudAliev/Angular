@@ -1,4 +1,9 @@
-<button class="app-button" [ngClass]="{ 'app-button__single-icon': iconName }" (click)="onClick()">
+<button
+  class="app-button"
+  [ngClass]="{ 'app-button__single-icon': iconName }"
+  (click)="onClick()"
+  [disabled]="disabled"
+>
   <!-- Replace the text below with your code -->
   <ng-container *ngIf="buttonText">
     {{ buttonText }}

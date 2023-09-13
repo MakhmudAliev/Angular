@@ -1,18 +1,23 @@
 import { Directive } from '@angular/core';
-import { AbstractControl, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator, Validators } from '@angular/forms';
 
 @Directive({
   selector: '[emailValidator]',
   providers: [
-    /*Add your code here*/
+    {
+      provide: NG_VALIDATORS,
+      useExisting: EmailValidatorDirective,
+      multi: true,
+    },
   ],
 })
 export class EmailValidatorDirective implements Validator {
-  validate(control: AbstractControl<any, any>): ValidationErrors | null {
-    throw new Error('Method not implemented.');
+  validate(control: AbstractControl): ValidationErrors | null {
+    return Validators.email(control);
   }
-  registerOnValidatorChange?(fn: () => void): void {
-    throw new Error('Method not implemented.');
-  }
-  // Add your code here
+}
+
+export function customEmailValidator(control: AbstractControl): ValidationErrors | null {
+  const emailValidator = new EmailValidatorDirective();
+  return emailValidator.validate(control);
 }

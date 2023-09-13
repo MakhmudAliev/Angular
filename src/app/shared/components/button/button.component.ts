@@ -10,6 +10,7 @@ import { IconDefinition, IconName, faEdit, fas } from '@fortawesome/free-solid-s
 export class ButtonComponent implements OnChanges {
   @Input() buttonText?: string;
   @Input() iconName?: IconName;
+  @Input() disabled = false;
   icon: IconDefinition = faEdit;
   @Output() btnClick = new EventEmitter();
 
