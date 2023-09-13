@@ -12,6 +12,6 @@ export class SearchComponent {
   @Output() search = new EventEmitter();
 
   onClick() {
-    this.search.emit();
+    this.search.emit(this.placeholder);
   }
 }
