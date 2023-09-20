@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CoursesStoreService } from '@app/services/courses-store.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuid } from 'uuid';
@@ -15,10 +16,11 @@ export type Author = {
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
+  constructor(public fb: FormBuilder, public library: FaIconLibrary, private coursesStore: CoursesStoreService) {
     library.addIconPacks(fas);
   }
   courseForm!: FormGroup;
+  authors$ = this.coursesStore.authors$;
   createdAuthors: Author[] = [];
   // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 
@@ -30,6 +32,8 @@ export class CourseFormComponent implements OnInit {
       authors: this.fb.array([]),
       duration: [0, [Validators.required, Validators.min(0)]],
     });
+
+    this.coursesStore.getAllAuthors();
   }
 
   get authors() {
@@ -74,9 +78,10 @@ export class CourseFormComponent implements OnInit {
   }
 
   createAuthor(authorName: string) {
-    if (!this.createdAuthors.find(author => author.name === authorName)) {
-      this.createdAuthors.push({ name: authorName, id: uuid() });
-    }
+    const a = this.coursesStore.createAuthor(authorName);
+    // if (!this.createdAuthors.find(author => author.name === authorName)) {
+    //   this.createdAuthors.push({ name: authorName, id: uuid() });
+    // }
   }
 
   onSubmit() {

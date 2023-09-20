@@ -1,42 +1,97 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SessionStorageService } from '@app/auth/services/session-storage.service';
+import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+
+export interface Course {
+  title: string;
+  description: string;
+  creationDate: string;
+  duration: number;
+  authors: string[];
+  id: string;
+}
+
+export interface Author {
+  name: string;
+  id: string;
+}
+
+type ApiResponse<T> = {
+  successful: boolean;
+  result: T;
+};
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoursesService {
-    getAll() {
-        // Add your code here
-    }
+  constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {}
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private baseUrl = 'http://localhost:4000';
+  private headers = new HttpHeaders({
+    Authorization: `${this.sessionStorage.getToken()}`,
+  });
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  getAll() {
+    return this.http.get<ApiResponse<Course[]>>(`${this.baseUrl}/courses/all`).pipe(
+      // TODO: chain inside of pipe, instead of nested operations
+      switchMap(({ result: courses }) => {
+        const authorRequests = courses.map(course => this.fetchAuthorNames(course.authors));
+        return forkJoin(authorRequests).pipe(
+          map(authorNames => {
+            courses.forEach((course, index) => {
+              course.authors = authorNames[index];
+            });
+            return courses;
+          })
+        );
+      })
+    );
+  }
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  createCourse(course: Course) {
+    return this.http.post<Course>(`${this.baseUrl}/courses/add`, course);
+  }
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  editCourse(id: string, course: Course) {}
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  getCourse(id: string) {
+    return this.http.get<ApiResponse<Course>>(`${this.baseUrl}/courses/${id}`).pipe(
+      map(resp => {
+        const course = resp.result;
+        this.fetchAuthorNames(course.authors).subscribe(val => {
+          course.authors = val;
+        });
+        return course;
+      })
+    );
+  }
 
-    getAllAuthors() {
-        // Add your code here
-    }
+  private fetchAuthorNames(authorIds: string[]): Observable<string[]> {
+    const observables = authorIds.map(authorId => this.getAuthorById(authorId));
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+    return forkJoin(observables).pipe(map(authors => authors.map(author => author.result.name)));
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  deleteCourse(id: string) {
+    // Add your code here
+  }
+
+  filterCourses(value: string) {
+    // Add your code here
+  }
+
+  getAllAuthors() {
+    return this.http.get<ApiResponse<Author[]>>(`${this.baseUrl}/authors/all`);
+  }
+
+  createAuthor(name: string) {
+    return this.http.post<Author>(`${this.baseUrl}/authors/add`, { name, id: 'id' });
+  }
+
+  getAuthorById(id: string) {
+    return this.http.get<ApiResponse<Author>>(`${this.baseUrl}/authors/${id}`);
+  }
 }

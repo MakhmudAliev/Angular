@@ -1,0 +1,30 @@
+<!-- Replace ::text:: with your code -->
+
+<div class="title">{{ (currentCourse$ | async)?.title }}</div>
+<div class="course-info">
+  <div class="course-info__description">
+    {{ (currentCourse$ | async)?.description }}
+  </div>
+  <div class="course-info__info">
+    <div>
+      <b>ID: </b><span class="course-info__info-id">{{ (currentCourse$ | async)?.id }}</span>
+    </div>
+    <div>
+      <b>Duration: </b
+      ><span class="course-info__info-duration">{{ (currentCourse$ | async)?.duration | duration }}</span>
+    </div>
+    <div>
+      <b>Created: </b
+      ><span class="course-info__info-date">
+        {{ (currentCourse$ | async)?.creationDate }}
+      </span>
+    </div>
+    <div>
+      <b>Authors: </b><span class="course-info__info-authors">{{ (currentCourse$ | async)?.authors?.join(', ') }}</span>
+    </div>
+  </div>
+</div>
+<div class="navigation-block">
+  <!--Enter your code here-->
+  <a routerLink="/courses"><app-button buttonText="Back"></app-button></a>
+</div>

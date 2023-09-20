@@ -5,7 +5,7 @@
   [description]="course.description"
   [duration]="course.duration"
   [creationDate]="parseDate(course.creationDate)"
-  [isEditable]="editable"
+  [isEditable]="(isAdmin$ | async) || false"
   [authors]="course.authors"
   (showCourse)="onShowCourse($event)"
 >

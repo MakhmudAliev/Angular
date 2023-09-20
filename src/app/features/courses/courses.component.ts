@@ -1,13 +1,24 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { CoursesStoreService } from '@app/services/courses-store.service';
+import { Course, CoursesService } from '@app/services/courses.service';
 import { mockedCoursesList } from '@app/shared/mocks/mock';
+import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss'],
 })
-export class CoursesComponent {
-  @Input() courses: typeof mockedCoursesList = [];
+export class CoursesComponent implements OnInit {
+  isLoading$ = this.coursesStore.isLoading$;
+  courses$ = this.coursesStore.courses$;
+
+  constructor(private coursesStore: CoursesStoreService, private userStoreService: UserStoreService) {}
+
+  ngOnInit(): void {
+    this.coursesStore.getAll();
+    this.userStoreService.getUser();
+  }
 
   onSearchClick(searchQuery: string) {
     console.log('🚀 ~ search...', searchQuery);

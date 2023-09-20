@@ -3,6 +3,8 @@
   <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="login-form">
       <div>
+        <div *ngIf="error !== ''" class="text-danger mb-2">{{ error }}</div>
+
         <div class="form__control">
           <label for="email">Email</label>
           <!--Use the name `email` for the form control.-->
@@ -11,7 +13,7 @@
           <span
             id="emailErrorMessage"
             class="text-danger"
-            *ngIf="isFormSubmitted && (!loginForm.controls.email?.valid && loginForm.controls.email?.touched)"
+            *ngIf="isFormSubmitted && !loginForm.controls.email?.valid && loginForm.controls.email?.touched"
           >
             Invalid email format.
           </span>
@@ -32,7 +34,10 @@
         <div class="form__action">
           <app-button buttonText="Login"></app-button>
         </div>
-        <div class="form__text">If you don't have an account you may <strong>Registration</strong></div>
+        <div class="form__text">
+          If you don't have an account you may
+          <strong><a routerLink="/registration" routerLinkActive="active">Registration</a></strong>
+        </div>
       </div>
     </div>
   </form>

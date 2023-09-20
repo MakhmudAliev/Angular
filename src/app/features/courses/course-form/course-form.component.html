@@ -101,8 +101,8 @@
         <!-- Display created authors -->
         <div>
           <div class="mt-2"><h3>Course Authors</h3></div>
-          <ng-container *ngIf="createdAuthors.length !== 0; else noAuthors">
-            <div class="course__authors" *ngFor="let author of createdAuthors; let i = index">
+          <ng-container *ngIf="(authors$ | async)?.length !== 0; else noAuthors">
+            <div class="course__authors" *ngFor="let author of authors$ | async; let i = index">
               <div>
                 {{ author.name }}
               </div>

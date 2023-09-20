@@ -2,20 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ModalComponent } from './components/modal/modal.component';
-import {
-  HeaderComponent,
-  ButtonComponent,
-  InfoComponent,
-  SearchComponent,
-  CourseCardComponent,
-  LoginFormComponent,
-  RegistrationFormComponent,
-  CourseFormComponent,
-} from './components';
+import { HeaderComponent, ButtonComponent, InfoComponent, SearchComponent } from './components';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DurationPipe } from './pipes/duration.pipe';
-import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { EmailValidatorDirective } from '@shared/directives/email.directive';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { RouterModule } from '@angular/router';
 
 const components = [
   HeaderComponent,
@@ -23,18 +14,13 @@ const components = [
   InfoComponent,
   SearchComponent,
   ModalComponent,
-  CourseCardComponent,
-  LoginFormComponent,
-  RegistrationFormComponent,
-  CourseFormComponent,
-  DurationPipe,
-  CustomDatePipe,
   EmailValidatorDirective,
+  SpinnerComponent,
 ];
 
 @NgModule({
-  declarations: [components],
-  imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
+  declarations: [components, SpinnerComponent],
+  imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [components, CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class SharedModule {}
