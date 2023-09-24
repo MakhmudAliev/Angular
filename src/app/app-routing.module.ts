@@ -6,13 +6,12 @@ import { NotAuthorizedGuard } from './auth/guards/not-authorized.guard';
 const routes: Routes = [
   {
     path: 'login',
-    loadChildren: () => import('./features/login-form/login-form.module').then(m => m.LoginFormModule),
+    loadChildren: () => import('./features/login-form/login.module').then(m => m.LoginModule),
     canActivate: [NotAuthorizedGuard],
   },
   {
     path: 'registration',
-    loadChildren: () =>
-      import('./features/registration-form/registration-form.module').then(m => m.RegistrationFormModule),
+    loadChildren: () => import('./features/registration-form/registration.module').then(m => m.RegistrationModule),
     canActivate: [NotAuthorizedGuard],
   },
   {

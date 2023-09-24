@@ -1,26 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { SessionStorageService } from './session-storage.service';
-
-export interface User {
-  name?: string;
-  email: string;
-  password: string;
-  role?: 'admin' | 'user';
-  id?: string;
-}
-
-interface RegisterApiResponse {
-  successful: boolean;
-  errors: string[];
-}
-
-interface LoginApiResponse {
-  successful: boolean;
-  result: string;
-  user: User;
-}
+import { LoginApiResponse } from '../models/login-api-response.model';
+import { RegistrationApiResponse } from '../models/registration-api-response.model';
+import { User } from '@app/user/model/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -48,11 +32,7 @@ export class AuthService {
 
   logout() {
     // Add your code here
-    const headers = new HttpHeaders({
-      Authorization: `${this.sessionStorage.getToken()}`,
-    });
-
-    return this.http.delete<void>(`${this.baseUrl}/logout`, { headers }).pipe(
+    return this.http.delete<void>(`${this.baseUrl}/logout`).pipe(
       tap(() => {
         this.sessionStorage.deleteToken();
         this.isAuthorised = false;
@@ -63,7 +43,7 @@ export class AuthService {
   register(user: User) {
     // replace 'any' with the required interface
     // Add your code here
-    return this.http.post<RegisterApiResponse>(`${this.baseUrl}/register`, user);
+    return this.http.post<RegistrationApiResponse>(`${this.baseUrl}/register`, user);
   }
 
   get isAuthorised() {
@@ -71,7 +51,7 @@ export class AuthService {
     return this.isAuthorised$$.getValue();
   }
 
-  set isAuthorised(value: boolean) {
+  private set isAuthorised(value: boolean) {
     // Add your code here. Change isAuthorized$$ value
     this.isAuthorised$$.next(value);
   }

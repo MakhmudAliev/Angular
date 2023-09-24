@@ -8,4 +8,4 @@ import { RouterModule } from '@angular/router';
   imports: [SharedModule, RouterModule.forChild([{ path: '', component: LoginFormComponent }])],
   exports: [LoginFormComponent],
 })
-export class LoginFormModule {}
+export class LoginModule {}

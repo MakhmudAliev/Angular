@@ -1,11 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '@app/auth/services/auth.service';
-
-interface UserResponse {
-  successful: boolean;
-  result: User;
-}
+import { User } from '../model/user.model';
+import { UserApiResponse } from '../model/user-api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +13,6 @@ export class UserService {
 
   getUser() {
     // Add your code here
-    return this.http.get<UserResponse>(`${this.baseUrl}/users/me`);
+    return this.http.get<UserApiResponse>(`${this.baseUrl}/users/me`);
   }
 }

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Author, Course, CoursesService } from './courses.service';
+import { CoursesService } from './courses.service';
 import { v4 as uuid } from 'uuid';
+import { Author } from '@app/features/courses/model/authors.model';
+import { Course } from '@app/features/courses/model/courses.model';
 
 @Injectable({
   providedIn: 'root',

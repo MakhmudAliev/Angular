@@ -3,12 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { CoursesStoreService } from '@app/services/courses-store.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { v4 as uuid } from 'uuid';
-
-export type Author = {
-  id: string;
-  name: string;
-};
+import { Author } from '../model/authors.model';
 
 @Component({
   selector: 'app-course-form',

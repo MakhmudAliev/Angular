@@ -3,7 +3,6 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/services/auth.service';
-import { SessionStorageService } from '@app/auth/services/session-storage.service';
 
 @Component({
   selector: 'app-login-form',
@@ -13,10 +12,7 @@ import { SessionStorageService } from '@app/auth/services/session-storage.servic
 export class LoginFormComponent {
   @ViewChild('loginForm') public loginForm!: NgForm;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router 
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   email = '';
   password = '';

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Course } from '@app/services/courses.service';
 import { UserStoreService } from '@app/user/services/user-store.service';
+import { Course } from '../model/courses.model';
 
 @Component({
   selector: 'app-course-list',

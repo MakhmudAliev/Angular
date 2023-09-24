@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CoursesStoreService } from '@app/services/courses-store.service';
-import { Course, CoursesService } from '@app/services/courses.service';
-import { mockedCoursesList } from '@app/shared/mocks/mock';
 import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Component({

@@ -1,22 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStorageService } from '@app/auth/services/session-storage.service';
-import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
+import { Author } from '@app/features/courses/model/authors.model';
+import { Course } from '@app/features/courses/model/courses.model';
+import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
-export interface Course {
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
-  id: string;
-}
-
-export interface Author {
-  name: string;
-  id: string;
-}
 
 type ApiResponse<T> = {
   successful: boolean;

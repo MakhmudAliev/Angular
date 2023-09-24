@@ -8,4 +8,4 @@ import { RouterModule } from '@angular/router';
   imports: [SharedModule, RouterModule.forChild([{ path: '', component: RegistrationFormComponent }])],
   exports: [RegistrationFormComponent],
 })
-export class RegistrationFormModule {}
+export class RegistrationModule {}
