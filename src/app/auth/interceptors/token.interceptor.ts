@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { SessionStorageService } from '../services/session-storage.service';
 import { Router } from '@angular/router';
@@ -27,11 +27,14 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          this.authService.logout().subscribe({
-            next: () => this.router.navigate(['/login']),
-          });
+          return this.authService.logout().pipe(
+            switchMap(() => {
+              this.router.navigate(['/login']);
+              return throwError(() => error);
+            })
+          );
         }
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }

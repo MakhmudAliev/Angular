@@ -18,9 +18,6 @@ export class CoursesService {
   constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {}
 
   private baseUrl = 'http://localhost:4000';
-  private headers = new HttpHeaders({
-    Authorization: `${this.sessionStorage.getToken()}`,
-  });
 
   getAll() {
     return this.http.get<ApiResponse<Course[]>>(`${this.baseUrl}/courses/all`).pipe(
@@ -47,12 +44,13 @@ export class CoursesService {
 
   getCourse(id: string) {
     return this.http.get<ApiResponse<Course>>(`${this.baseUrl}/courses/${id}`).pipe(
-      map(resp => {
+      switchMap(resp => {
         const course = resp.result;
-        this.fetchAuthorNames(course.authors).subscribe(val => {
-          course.authors = val;
-        });
-        return course;
+        return this.fetchAuthorNames(course.authors).pipe(
+          map(authorNames => {
+            return { ...course, authors: authorNames };
+          })
+        );
       })
     );
   }
@@ -76,7 +74,7 @@ export class CoursesService {
   }
 
   createAuthor(name: string) {
-    return this.http.post<Author>(`${this.baseUrl}/authors/add`, { name, id: 'id' });
+    return this.http.post<ApiResponse<Author>>(`${this.baseUrl}/authors/add`, { name, id: 'id' });
   }
 
   getAuthorById(id: string) {
