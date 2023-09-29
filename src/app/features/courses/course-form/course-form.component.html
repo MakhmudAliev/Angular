@@ -71,10 +71,11 @@
             <div class="course__flex">
               <input type="text" id="author" formControlName="newAuthor" class="form-control" />
               <app-button
-                (click)="addAuthor()"
+                (click)="createAuthor()"
                 id="createAuthor"
                 buttonText="Create author"
                 [disabled]="isAddAuthorButtonDisabled()"
+                type="button"
               ></app-button>
             </div>
             <div *ngIf="courseForm.get('newAuthor')?.hasError('pattern')" class="text-danger">
@@ -87,30 +88,30 @@
               Author name should not be empty.
             </div>
 
-            <!-- Display added authors -->
-            <div *ngIf="authors.length === 0" class="mt-2">No authors added yet.</div>
-            <div class="course__authors" *ngFor="let author of authors.controls; let i = index">
-              <div>
-                {{ getAuthorName(author) }}
-                <app-button (click)="createAuthor(getAuthorName(author))" iconName="plus"></app-button>
-                <app-button (click)="removeAuthor(i)" iconName="trash-can"></app-button>
-              </div>
-            </div>
+            <!-- Display all existing authors -->
+            <ng-container *ngIf="authors$ | async as existingAuthors">
+              <ng-container *ngIf="existingAuthors && existingAuthors.length !== 0; else noAuthors">
+                <div class="course__authors" *ngFor="let author of existingAuthors; let i = index">
+                  <div>
+                    {{ author.name }}
+                    <app-button iconName="plus" (click)="addAuthor(author)" type="button"></app-button>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noAuthors>Author list is empty</ng-template>
+            </ng-container>
           </div>
         </div>
-        <!-- Display created authors -->
+        <!-- Display course authors -->
         <div>
           <div class="mt-2"><h3>Course Authors</h3></div>
-          <ng-container *ngIf="{ authors: authors$ | async } as data">
-            <ng-container *ngIf="data.authors && data.authors.length !== 0; else noAuthors">
-              <div class="course__authors" *ngFor="let author of data.authors; let i = index">
-                <div>
-                  {{ author.name }}
-                </div>
-              </div>
-            </ng-container>
-            <ng-template #noAuthors>Author list is empty</ng-template>
-          </ng-container>
+          <div *ngIf="authors.length === 0" class="mt-2">No authors added yet.</div>
+          <div class="course__authors" *ngFor="let author of authors.controls; let i = index">
+            <div>
+              {{ getAuthorName(author) }}
+              <app-button (click)="removeAuthor(i)" iconName="trash-can" type="button"></app-button>
+            </div>
+          </div>
         </div>
       </div>
       <!-- End Authors -->

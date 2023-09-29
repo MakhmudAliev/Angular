@@ -4,6 +4,7 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { Author } from '../model/authors.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-course-form',
@@ -11,12 +12,17 @@ import { Author } from '../model/authors.model';
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  constructor(public fb: FormBuilder, public library: FaIconLibrary, private coursesStore: CoursesStoreService) {
+  constructor(
+    public fb: FormBuilder,
+    public library: FaIconLibrary,
+    private coursesStore: CoursesStoreService,
+    private router: Router
+  ) {
     library.addIconPacks(fas);
   }
   courseForm!: FormGroup;
   authors$ = this.coursesStore.authors$;
-  createdAuthors: Author[] = [];
+  private addedAuthors: string[] = [];
   // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 
   ngOnInit() {
@@ -39,16 +45,15 @@ export class CourseFormComponent implements OnInit {
     return author.get('name')?.value;
   }
 
-  addAuthor() {
-    const newAuthorName = this.courseForm.get('newAuthor')?.value;
-
-    if (newAuthorName) {
+  addAuthor(author: Author) {
+    if (!this.addedAuthors.includes(author.id)) {
       this.authors.push(
         this.fb.group({
-          name: [newAuthorName, Validators.required],
+          name: [author.name, Validators.required],
+          id: [author.id],
         })
       );
-      this.courseForm.get('newAuthor')?.reset();
+      this.addedAuthors.push(author.id);
     }
   }
 
@@ -72,18 +77,26 @@ export class CourseFormComponent implements OnInit {
     return this.courseForm.controls.duration;
   }
 
-  createAuthor(authorName: string) {
-    const a = this.coursesStore.createAuthor(authorName);
-    // if (!this.createdAuthors.find(author => author.name === authorName)) {
-    //   this.createdAuthors.push({ name: authorName, id: uuid() });
-    // }
+  createAuthor() {
+    const newAuthorName = this.courseForm.get('newAuthor')?.value;
+    this.coursesStore.createAuthor(newAuthorName);
+    this.courseForm.get('newAuthor')?.reset();
   }
 
   onSubmit() {
     if (this.courseForm.valid) {
-      const courseTitle = this.courseForm.value.title;
-      console.log('🚀 ~ Submitted form for:', courseTitle);
-      this.courseForm.reset();
+      const course = {
+        ...this.courseForm.value,
+        authors: this.courseForm.value.authors?.map((a: Author) => a.id),
+      };
+      this.coursesStore.createCourse(course).subscribe({
+        next: () => {
+          this.courseForm.reset();
+          this.authors.clear();
+          this.router.navigate(['/courses']);
+        },
+        error: console.log,
+      });
     }
   }
 }
