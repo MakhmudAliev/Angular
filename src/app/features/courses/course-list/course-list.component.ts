@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { mockedCoursesList } from '@app/shared/mocks/mock';
+import { Router } from '@angular/router';
+import { UserStoreService } from '@app/user/services/user-store.service';
+import { Course } from '../model/courses.model';
 
 @Component({
   selector: 'app-course-list',
@@ -7,27 +9,30 @@ import { mockedCoursesList } from '@app/shared/mocks/mock';
   styleUrls: ['./course-list.component.scss'],
 })
 export class CourseListComponent {
-  @Input() courses: typeof mockedCoursesList = [];
+  @Input() courses: Course[] = [];
   @Input() editable: boolean = false;
+
+  isAdmin$ = this.userStoreService.isAdmin$;
 
   @Output() showCourse: EventEmitter<string> = new EventEmitter<string>();
   @Output() editCourse: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleteCourse: EventEmitter<string> = new EventEmitter<string>();
 
+  constructor(private router: Router, private userStoreService: UserStoreService) {}
+
   onShowCourse(courseId: string) {
-    console.log('🚀 ~ onShowCourse:', courseId);
-    this.showCourse.emit(courseId);
+    this.router.navigate(['/courses', courseId]);
   }
 
-  onEditCourse (courseId: string) {
+  onEditCourse(courseId: string) {
     console.log('🚀 ~ onEditCourse:', courseId);
-    this.editCourse.emit(courseId);
-  };
+    this.router.navigate(['/courses/edit', courseId]);
+  }
 
-  onDeleteCourse (courseId: string) {
+  onDeleteCourse(courseId: string) {
     console.log('🚀 ~ onDeleteCourse:', courseId);
     this.deleteCourse.emit(courseId);
-  };
+  }
 
   parseDate = (dateString: string): Date => {
     const parts = dateString.split('/');

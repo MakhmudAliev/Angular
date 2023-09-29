@@ -1,42 +1,123 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { CoursesService } from './courses.service';
+import { v4 as uuid } from 'uuid';
+import { Author } from '@app/features/courses/model/authors.model';
+import { Course } from '@app/features/courses/model/courses.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
-export class CoursesStoreService {
-    getAll(){
-        // Add your code here
-    }
+export class CoursesStoreService implements OnDestroy {
+  private isLoading$$ = new BehaviorSubject<boolean>(false);
+  private courses$$ = new BehaviorSubject<Course[]>([]);
+  private currentCourse$$ = new BehaviorSubject<Course | null>(null);
+  private authors$$ = new BehaviorSubject<Author[]>([]);
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private subscriptions: Subscription[] = [];
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  isLoading$ = this.isLoading$$.asObservable();
+  courses$ = this.courses$$.asObservable();
+  currentCourse$ = this.currentCourse$$.asObservable();
+  authors$ = this.authors$$.asObservable();
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  constructor(private coursesService: CoursesService) {}
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions = [];
+  }
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  getAll() {
+    // Add your code here
+    this.isLoading$$.next(true);
 
-    getAllAuthors() {
-        // Add your code here
-    }
+    // TODO: unsubscribe
+    const subscription = this.coursesService.getAll().subscribe({
+      next: courses => {
+        this.courses$$.next(courses);
+        this.isLoading$$.next(false);
+      },
+      error: () => {
+        this.isLoading$$.next(false);
+      },
+    });
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+    this.subscriptions.push(subscription);
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  createCourse(course: Course) {
+    // replace 'any' with the required interface
+    // Add your code here
+
+    this.isLoading$$.next(true);
+
+    const subscription = this.coursesService.createCourse(course).subscribe({
+      next: resp => {
+        console.log('resp', resp);
+      },
+    });
+
+    this.subscriptions.push(subscription);
+  }
+
+  getCourse(id: string) {
+    // Add your code here
+    this.isLoading$$.next(true);
+
+    const subscription = this.coursesService.getCourse(id).subscribe({
+      next: course => {
+        console.log('🚀 ~ ===course:', course);
+        this.currentCourse$$.next(course);
+        this.isLoading$$.next(false);
+      },
+      error: () => {
+        this.isLoading$$.next(false);
+      },
+    });
+
+    this.subscriptions.push(subscription);
+  }
+
+  editCourse(id: string, course: any) {
+    // replace 'any' with the required interface
+    // Add your code here
+  }
+
+  deleteCourse(id: string) {
+    // Add your code here
+  }
+
+  filterCourses(value: string) {
+    // Add your code here
+  }
+
+  getAllAuthors() {
+    this.isLoading$$.next(true);
+
+    const subscription = this.coursesService.getAllAuthors().subscribe({
+      next: response => {
+        this.authors$$.next(response.result);
+      },
+    });
+    this.subscriptions.push(subscription);
+  }
+
+  createAuthor(name: string) {
+    // Add your code here
+
+    this.isLoading$$.next(true);
+
+    const subscription = this.coursesService.createAuthor(name).subscribe({
+      next: resp => {
+        this.authors$$.next([...this.authors$$.getValue(), resp.result]);
+        this.isLoading$$.next(false);
+      },
+    });
+    this.subscriptions.push(subscription);
+  }
+
+  getAuthorById(id: string) {
+    // Add your code here
+  }
 }

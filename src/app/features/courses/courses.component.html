@@ -1,14 +1,24 @@
 <!-- Search component -->
 <app-search (search)="onSearchClick($event)"></app-search>
 
-<!-- Info component -->
-<app-info
-  *ngIf="courses.length === 0"
-  title="Your List Is Empty"
-  text="Please use 'Add New Course' button to add your first course"
->
-  <app-button buttonText="Add new course"></app-button>
-</app-info>
+<ng-container *ngIf="isLoading$ | async; else loadedContent">
+  Loading...
+  <app-spinner></app-spinner>
+</ng-container>
 
-<!-- Courses list -->
-<app-course-list [courses]="courses"></app-course-list>
+<ng-template #loadedContent>
+  <!-- Info component -->
+  <app-info
+    *ngIf="(courses$ | async)?.length === 0"
+    title="Your List Is Empty"
+    text="Please use 'Add New Course' button to add your first course"
+  >
+  </app-info>
+
+  <div class="add-button">
+    <a routerLink="/courses/add"><app-button buttonText="Add new course"></app-button></a>
+  </div>
+
+  <!-- Courses list -->
+  <app-course-list [courses]="(courses$ | async) || []"></app-course-list>
+</ng-template>

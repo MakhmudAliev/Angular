@@ -1,22 +1,23 @@
 <app-header>
-  <app-button buttonText="Login"></app-button>
+  <a routerLink="/login"><app-button buttonText="Login"></app-button></a>
 </app-header>
 <div class="app-root">
-  
+  <router-outlet></router-outlet>
+
   <!-- CourseList component -->
-  <app-courses [courses]="coursesList"></app-courses>
+  <!-- <app-courses [courses]="coursesList"></app-courses> -->
 
   <!-- Course Info component -->
-  <app-course-info [description]="coursesList[0].description"></app-course-info>
+  <!-- <app-course-info [description]="coursesList[0].description"></app-course-info> -->
 
   <!-- Login Form component -->
-  <app-login-form></app-login-form>
+  <!-- <app-login-form></app-login-form> -->
 
   <!-- Login Form component -->
-  <app-registration-form></app-registration-form>
+  <!-- <app-registration-form></app-registration-form> -->
 
   <!-- Login Form component -->
-  <app-course-form></app-course-form>
+  <!-- <app-course-form></app-course-form> -->
 
   <!-- Modal component -->
   <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->

@@ -101,14 +101,16 @@
         <!-- Display created authors -->
         <div>
           <div class="mt-2"><h3>Course Authors</h3></div>
-          <ng-container *ngIf="createdAuthors.length !== 0; else noAuthors">
-            <div class="course__authors" *ngFor="let author of createdAuthors; let i = index">
-              <div>
-                {{ author.name }}
+          <ng-container *ngIf="{ authors: authors$ | async } as data">
+            <ng-container *ngIf="data.authors && data.authors.length !== 0; else noAuthors">
+              <div class="course__authors" *ngFor="let author of data.authors; let i = index">
+                <div>
+                  {{ author.name }}
+                </div>
               </div>
-            </div>
+            </ng-container>
+            <ng-template #noAuthors>Author list is empty</ng-template>
           </ng-container>
-          <ng-template #noAuthors>Author list is empty</ng-template>
         </div>
       </div>
       <!-- End Authors -->

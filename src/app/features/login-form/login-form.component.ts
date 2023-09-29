@@ -1,5 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/auth/services/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -9,9 +12,12 @@ import { NgForm } from '@angular/forms';
 export class LoginFormComponent {
   @ViewChild('loginForm') public loginForm!: NgForm;
 
+  constructor(private authService: AuthService, private router: Router) {}
+
   email = '';
   password = '';
   isFormSubmitted = false;
+  error = '';
 
   onSubmit() {
     this.isFormSubmitted = true;
@@ -20,8 +26,13 @@ export class LoginFormComponent {
       return;
     }
 
-    console.log('🚀 ~ form submited');
-    this.loginForm.reset();
-    this.isFormSubmitted = false;
+    this.authService.login({ email: this.email, password: this.password }).subscribe({
+      next: () => {
+        this.router.navigate(['/courses']);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.error = 'Incorrect email or password';
+      },
+    });
   }
 }

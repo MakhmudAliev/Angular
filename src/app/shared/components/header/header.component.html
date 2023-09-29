@@ -1,5 +1,13 @@
 <div class="app-header">
-  <img alt="logo" src="assets/logo.svg" />
-  <!-- Enter your code here -->
-  <ng-content></ng-content>
+  <a routerLink="/"><img alt="logo" src="assets/logo.svg" /></a>
+  <div>
+    <div class="app-header__logged-in" *ngIf="isAuthorised$ | async as isAuthorized; else loggedOut">
+      <div>Welcome, user</div>
+      <app-button buttonText="Logout" (click)="onLogout()"></app-button>
+    </div>
+
+    <ng-template #loggedOut>
+      <a routerLink="/login"><app-button buttonText="Login"></app-button></a>
+    </ng-template>
+  </div>
 </div>
