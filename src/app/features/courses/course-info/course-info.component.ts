@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoursesStoreService } from '@app/services/courses-store.service';
+import { CoursesFacade } from '@app/store/courses/courses.facade';
 
 @Component({
   selector: 'app-course-info',
@@ -8,7 +8,6 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
   styleUrls: ['./course-info.component.scss'],
 })
 export class CourseInfoComponent implements OnInit {
-  // Use the names for the input `course`.
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() id?: string;
@@ -16,17 +15,17 @@ export class CourseInfoComponent implements OnInit {
   @Input() duration: number = 60;
   @Input() authors: string[] = [];
 
-  isLoading$ = this.coursesStore.isLoading$;
-  currentCourse$ = this.coursesStore.currentCourse$;
+  isLoading$ = this.coursesFacade.isSingleCourseLoading$;
+  currentCourse$ = this.coursesFacade.course$;
 
-  constructor(private coursesStore: CoursesStoreService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private coursesFacade: CoursesFacade, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const courseId = params.get('id');
 
       if (courseId) {
-        this.coursesStore.getCourse(courseId);
+        this.coursesFacade.getSingleCourse(courseId);
       } else {
         this.router.navigate(['/courses']);
       }

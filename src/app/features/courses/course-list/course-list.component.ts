@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserStoreService } from '@app/user/services/user-store.service';
 import { Course } from '../model/courses.model';
+import { CoursesFacade } from '@app/store/courses/courses.facade';
 
 @Component({
   selector: 'app-course-list',
@@ -18,7 +19,11 @@ export class CourseListComponent {
   @Output() editCourse: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleteCourse: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private router: Router, private userStoreService: UserStoreService) {}
+  constructor(
+    private router: Router,
+    private userStoreService: UserStoreService,
+    private coursesFacade: CoursesFacade
+  ) {}
 
   onShowCourse(courseId: string) {
     this.router.navigate(['/courses', courseId]);
@@ -30,8 +35,7 @@ export class CourseListComponent {
   }
 
   onDeleteCourse(courseId: string) {
-    console.log('🚀 ~ onDeleteCourse:', courseId);
-    this.deleteCourse.emit(courseId);
+    this.coursesFacade.deleteCourse(courseId);
   }
 
   parseDate = (dateString: string): Date => {
