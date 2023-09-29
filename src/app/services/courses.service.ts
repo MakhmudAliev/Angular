@@ -1,10 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SessionStorageService } from '@app/auth/services/session-storage.service';
 import { Author } from '@app/features/courses/model/authors.model';
 import { Course } from '@app/features/courses/model/courses.model';
 import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { v4 as uuid } from 'uuid';
 
 type ApiResponse<T> = {
   successful: boolean;
@@ -15,7 +15,7 @@ type ApiResponse<T> = {
   providedIn: 'root',
 })
 export class CoursesService {
-  constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {}
+  constructor(private http: HttpClient) {}
 
   private baseUrl = 'http://localhost:4000';
 
@@ -74,7 +74,8 @@ export class CoursesService {
   }
 
   createAuthor(name: string) {
-    return this.http.post<ApiResponse<Author>>(`${this.baseUrl}/authors/add`, { name, id: 'id' });
+    const id = uuid();
+    return this.http.post<ApiResponse<Author>>(`${this.baseUrl}/authors/add`, { name, id });
   }
 
   getAuthorById(id: string) {

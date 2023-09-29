@@ -11,6 +11,7 @@ export class ButtonComponent implements OnChanges {
   @Input() buttonText?: string;
   @Input() iconName?: IconName;
   @Input() disabled = false;
+  @Input() type: 'submit' | 'button' = 'submit';
   icon: IconDefinition = faEdit;
   @Output() btnClick = new EventEmitter();
 

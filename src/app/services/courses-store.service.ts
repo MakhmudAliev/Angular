@@ -50,15 +50,7 @@ export class CoursesStoreService implements OnDestroy {
     // replace 'any' with the required interface
     // Add your code here
 
-    this.isLoading$$.next(true);
-
-    const subscription = this.coursesService.createCourse(course).subscribe({
-      next: resp => {
-        console.log('resp', resp);
-      },
-    });
-
-    this.subscriptions.push(subscription);
+    return this.coursesService.createCourse(course);
   }
 
   getCourse(id: string) {
