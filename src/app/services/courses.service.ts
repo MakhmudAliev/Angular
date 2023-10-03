@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Author } from '@app/features/courses/model/authors.model';
 import { Course } from '@app/features/courses/model/courses.model';
@@ -40,7 +40,9 @@ export class CoursesService {
     return this.http.post<Course>(`${this.baseUrl}/courses/add`, course);
   }
 
-  editCourse(id: string, course: Course) {}
+  editCourse(id: string, course: Course) {
+    return this.http.patch(`${this.baseUrl}/courses/edit/${id}`, { id, course });
+  }
 
   getCourse(id: string) {
     return this.http.get<ApiResponse<Course>>(`${this.baseUrl}/courses/${id}`).pipe(
@@ -62,11 +64,12 @@ export class CoursesService {
   }
 
   deleteCourse(id: string) {
-    // Add your code here
+    return this.http.delete(`${this.baseUrl}/courses/${id}`);
   }
 
   filterCourses(value: string) {
-    // Add your code here
+    const params = new HttpParams().set('title', value);
+    return this.http.get<ApiResponse<Course[]>>(`${this.baseUrl}/courses/filter`, { params });
   }
 
   getAllAuthors() {

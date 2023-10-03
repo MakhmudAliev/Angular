@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoursesStoreService } from '@app/services/courses-store.service';
+import { CoursesFacade } from '@app/store/courses/courses.facade';
 import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Component({
@@ -8,17 +8,17 @@ import { UserStoreService } from '@app/user/services/user-store.service';
   styleUrls: ['./courses.component.scss'],
 })
 export class CoursesComponent implements OnInit {
-  isLoading$ = this.coursesStore.isLoading$;
-  courses$ = this.coursesStore.courses$;
+  isLoading$ = this.coursesFacade.isAllCoursesLoading$;
+  courses$ = this.coursesFacade.allCourses$;
 
-  constructor(private coursesStore: CoursesStoreService, private userStoreService: UserStoreService) {}
+  constructor(private userStoreService: UserStoreService, private coursesFacade: CoursesFacade) {}
 
   ngOnInit(): void {
-    this.coursesStore.getAll();
+    this.coursesFacade.getAllCourses();
     this.userStoreService.getUser();
   }
 
   onSearchClick(searchQuery: string) {
-    console.log('🚀 ~ search...', searchQuery);
+    this.coursesFacade.getFilteredCourses(searchQuery);
   }
 }

@@ -4,7 +4,7 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { Author } from '../model/authors.model';
-import { Router } from '@angular/router';
+import { CoursesFacade } from '@app/store/courses/courses.facade';
 
 @Component({
   selector: 'app-course-form',
@@ -16,14 +16,13 @@ export class CourseFormComponent implements OnInit {
     public fb: FormBuilder,
     public library: FaIconLibrary,
     private coursesStore: CoursesStoreService,
-    private router: Router
+    private coursesFacade: CoursesFacade
   ) {
     library.addIconPacks(fas);
   }
   courseForm!: FormGroup;
   authors$ = this.coursesStore.authors$;
   private addedAuthors: string[] = [];
-  // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 
   ngOnInit() {
     this.courseForm = this.fb.group({
@@ -89,14 +88,7 @@ export class CourseFormComponent implements OnInit {
         ...this.courseForm.value,
         authors: this.courseForm.value.authors?.map((a: Author) => a.id),
       };
-      this.coursesStore.createCourse(course).subscribe({
-        next: () => {
-          this.courseForm.reset();
-          this.authors.clear();
-          this.router.navigate(['/courses']);
-        },
-        error: console.log,
-      });
+      this.coursesFacade.createCourse(course);
     }
   }
 }
